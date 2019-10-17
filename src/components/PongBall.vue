@@ -3,17 +3,62 @@
 </template>
 
 <script>
-import Move from 'move-js'
+import transition from 'transitionjs'
 export default {
     name: 'PongBall',
     props: {
-      position: String
+        destination: Object
+    },
+    watch: {
+        destination: function (newDestination) {
+            this.move(newDestination.newX, newDestination.newY)
+        }
     },
     mounted() {
-      // the ball has to move on the y- and x-axis.
-      // We need as well a smooth and linear slide animation of the ball
-        var t = new Move(this.$el);
-        t.y(-80).duration(1200).x(-388).ease('linear').end();
+        this.$emit('ready');
+    },
+    beforeDestroy() {
+        clearInterval(this.idInterval);
+    },
+    methods: {
+        move: function(newX, newY) {
+            this.watchBallPosition();
+            transition.begin(this.$el, [
+                {
+                    property: "left",
+                    from: this.$el.style.left + "px",
+                    to: newX + "px"
+                },
+                {
+                    property: "top",
+                    from: this.$el.offsetTop + "px",
+                    to: newY + "px"
+                },
+            ], {
+                duration: "4000ms",
+                timingFunction: "linear",
+                onTransitionEnd: () => {
+                    clearInterval(this.idInterval);
+                }
+            })
+        },
+
+        watchBallPosition: function() {
+            if (this.idInterval) {
+                clearInterval(this.idInterval);
+            }
+            this.idInterval = setInterval(() => {
+                this.$emit(
+                    'position',
+                    {
+                        x: this.$el.offsetLeft,
+                        y: this.$el.offsetTop
+                    }
+                );
+
+              console.log("Left: " + this.$el.offsetLeft + ", Top: " + this.$el.offsetTop);
+            }, 65)
+        }
     }
 }
 </script>
