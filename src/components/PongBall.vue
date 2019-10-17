@@ -22,7 +22,7 @@ export default {
     },
     methods: {
         move: function(newX, newY) {
-            this.watchBallPosition();
+            //  this.watchBallPosition();
             transition.begin(this.$el, [
                 {
                     property: "left",
@@ -39,6 +39,9 @@ export default {
                 timingFunction: "linear",
                 onTransitionEnd: () => {
                     clearInterval(this.idInterval);
+                },
+                onBeforeChangeStyle: () => {
+                    this.watchBallPosition();
                 }
             })
         },
