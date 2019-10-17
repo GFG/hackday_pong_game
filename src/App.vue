@@ -1,28 +1,31 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png"> HELLLOOOOO
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <!-- <img alt="Vue logo" src="./assets/logo.png"> HELLLOOOOO //-->
+    <PongBoard />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import PongBoard from './components/PongBoard.vue'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+      PongBoard
   }
 }
 </script>
 
 <style>
+body {
+  background-color: black;
+  color: white;
+}
+
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  position: relative;
+  margin: 10% auto;
+  width: 800px;
+  height: 600px;
 }
 </style>
