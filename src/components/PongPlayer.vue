@@ -1,5 +1,5 @@
 <template>
-  <div :class="cssClass"></div>
+  <div :class="cssClass" :style="{ top: positionY + 'px' }"></div>
 </template>
 
 <script>
@@ -7,7 +7,8 @@ import Move from 'move-js'
 export default {
     name: 'PongPlayer',
     props: {
-      position: String
+        position: String,
+        positionY: Number
     },
     computed: {
         // a computed getter

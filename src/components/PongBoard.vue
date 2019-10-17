@@ -1,14 +1,14 @@
 <template>
   <div class="board_outer">
     <div class="board">
-      <PongPlayer position="left" />
-      <PongPlayer position="right" />
+      <PongPlayer position="left" :positionY="playerLeft.positionY" />
+      <PongPlayer position="right" :positionY="playerRight.positionY" />
       <PongBall />
     </div>
     <div class="board-legend">
-      <div class="player-left-name">Mario</div>
-      <div class="game-status">1:4</div>
-      <div class="player-right-name">Donkey</div>
+      <div class="player-left-name">{{playerLeft.name}}</div>
+      <div class="game-status">{{playerLeft.points}}:{{playerRight.points}}</div>
+      <div class="player-right-name">{{playerRight.name}}</div>
     </div>
   </div>
 </template>
@@ -20,11 +20,67 @@ import PongBall from './PongBall.vue'
 export default {
   name: 'PongBoard',
   props: {
-    msg: String
+    Game: Object
+  },
+  data: function () {
+      return {
+          playerLeft: {
+              name: 'Super Mario',
+              positionY: 50,
+              points: 0
+          },
+          playerRight: {
+              name: 'Donkey',
+              positionY: 100,
+              points: 0
+          }
+      }
   },
   components: {
       PongPlayer,
       PongBall
+  },
+  mounted() {
+    window.addEventListener("keypress", e => {
+        if ('w' == String.fromCharCode(e.keyCode)) {
+            this.MovePlayer('left', -25)
+        } else if ('s' == String.fromCharCode(e.keyCode)) {
+            this.MovePlayer('left', 25)
+        }
+    });
+  },
+  methods: {
+      MovePlayer: function(position, step) {
+        if (position == 'left') {
+            this.playerLeft.positionY = this.calculateNewPosition(step, position)
+        } else {
+            this.playerRight.positionY  = this.calculateNewPosition(step, position)
+        }
+      },
+
+      calculateNewPosition: function(step, position) {
+          let currentPosition = this.getPlayerPosition(position);
+          let newPosition = currentPosition + step;
+
+          if (newPosition < 0) {
+              newPosition = 0
+          } else if (newPosition > 490) {
+              newPosition = 490
+          }
+
+          return newPosition
+      },
+
+      getPlayerPosition: function(position) {
+          let currentPosition
+          if (position == 'left') {
+              currentPosition = this.playerLeft.positionY
+          } else {
+              currentPosition = this.playerRight.positionY
+          }
+
+          return currentPosition
+      }
   }
 }
 </script>
