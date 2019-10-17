@@ -3,6 +3,7 @@
 </template>
 
 <script>
+import Move from 'move-js'
 export default {
     name: 'PongPlayer',
     props: {
@@ -13,6 +14,11 @@ export default {
         cssClass: function () {
             return "player " + this.position
         }
+    },
+    mounted() {
+      // the player has to move only on the y-axis
+      let t = new Move(this.$el);
+      t.y(400).ease('linear').end();
     }
 }
 </script>

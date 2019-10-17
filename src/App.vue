@@ -7,7 +7,6 @@
 
 <script>
 import PongBoard from './components/PongBoard.vue'
-
 export default {
   name: 'app',
   components: {
