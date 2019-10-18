@@ -1,14 +1,14 @@
 <template>
   <div class="board_outer">
     <div class="board">
-      <PongPlayer position="left" :positionY="playerLeft.positionY" />
-      <PongPlayer position="right" :positionY="playerRight.positionY" />
-      <PongBall :destination="ballDestination" v-on:ready="gameStartBallMove" v-on:position="handleBallPosition" />
+      <PongPlayer position="left" :positionY="game.playerLeft.positionY" />
+      <PongPlayer position="right" :positionY="game.playerRight.positionY" />
+      <PongBall :destination="game.ball.destination" v-on:ready="gameStartBallMove" v-on:position="handleBallPosition" />
     </div>
     <div class="board-legend">
-      <div class="player-left-name">{{playerLeft.name}}</div>
-      <div class="game-status">{{playerLeft.points}}:{{playerRight.points}}</div>
-      <div class="player-right-name">{{playerRight.name}}</div>
+      <div class="player-left-name">{{game.playerLeft.name}}</div>
+      <div class="game-status">{{game.playerLeft.points}}:{{game.playerRight.points}}</div>
+      <div class="player-right-name">{{game.playerRight.name}}</div>
     </div>
   </div>
 </template>
@@ -20,25 +20,12 @@ import PongBall from './PongBall.vue'
 export default {
   name: 'PongBoard',
   props: {
-    Game: Object
+    initialGame: Object,
+    mySide: String
   },
   data: function () {
       return {
-          playerLeft: {
-              name: 'Super Mario',
-              positionY: 50,
-              points  : 0
-          },
-          playerRight: {
-              name: 'Donkey',
-              positionY: 100,
-              points: 0
-          },
-          ballDestination: {
-              newX: 0,
-              newY: 0
-          },
-          ballDirection: 'left'
+          game: this.initialGame
       }
   },
   components: {
@@ -48,9 +35,9 @@ export default {
   mounted() {
     window.addEventListener("keypress", e => {
         if ('w' == String.fromCharCode(e.keyCode)) {
-            this.MovePlayer('left', -25)
+            this.MovePlayer(this.mySide, -25)
         } else if ('s' == String.fromCharCode(e.keyCode)) {
-            this.MovePlayer('left', 25)
+            this.MovePlayer(this.mySide, 25)
         }
     });
   },
@@ -60,8 +47,8 @@ export default {
   methods: {
       // ball -----------------------------
       gameStartBallMove: function () {
-          //const x = (Math.random() >= 0.5) ? 'left' : 'right';
-          const ballDirection = 'left';
+          const ballDirection = (Math.random() >= 0.5) ? 'left' : 'right';
+          //const ballDirection = 'left';
 
           setTimeout(() => {
               this.moveBall(ballDirection);
@@ -73,16 +60,16 @@ export default {
       },
 
       moveBall: function (ballDirection) {
-          this.ballDestination = {
+          this.game.ball.destination = {
               newX: (ballDirection == 'right') ? 800 : 0,
               newY: this.randomY()
           };
 
-          this.ballDirection = ballDirection;
+          this.game.ball.direction = ballDirection;
       },
 
       handleBallPosition: function (ball) {
-          if (this.ballDirection == 'left') {
+          if (this.game.ball.direction == 'left') {
               this.checkLeftPlayerHit(ball)
           }
 
@@ -91,7 +78,7 @@ export default {
 
       checkLeftPlayerHit: function (ball) {
           if (ball.x > 15 && ball.x < 25) {
-              if (ball.y >= this.playerLeft.positionY && ball.y + 10 <= this.playerLeft.positionY + 60) {
+              if (ball.y >= this.game.playerLeft.positionY && ball.y + 10 <= this.game.playerLeft.positionY + 60) {
                   console.log("HIT LEFT =================");
                   this.moveBall('right');
               } else {
@@ -103,7 +90,7 @@ export default {
 
       checkRightPlayerHit: function (ball) {
           if (ball.x > 765 && ball.x < 775) {
-              if (ball.y >= this.playerRight.positionY && ball.y + 10 <= this.playerRight.positionY + 60) {
+              if (ball.y >= this.game.playerRight.positionY && ball.y + 10 <= this.game.playerRight.positionY + 60) {
                   console.log("HIT RIGHT =================");
                   this.moveBall('left');
               } else {
@@ -144,10 +131,10 @@ export default {
 
       getPlayerByPosition: function(position) {
           if (position == 'left') {
-              return this.playerLeft
+              return this.game.playerLeft
           }
 
-          return this.playerRight
+          return this.game.playerRight
       }
   }
 }

@@ -67,12 +67,16 @@ app.post('/leave-match', function (req, res) {
 });
 app.post('/register', function(req, res) {
 
+    let playerSide;
+
     if (game.playerLeft.name === null) {
         game.playerLeft.name = req.body.player;
+        playerSide = 'left';
         console.log('Player left successful added');
     } else if (game.playerRight.name === null) {
         game.playerRight.name = req.body.player;
         game.status = "startGame";
+        playerSide = 'right';
         console.log('Player right successful added');
 
     } else {
@@ -80,7 +84,10 @@ app.post('/register', function(req, res) {
         return
     }
     console.log('Ready to start game!');
-    res.send(game);
+    res.send({
+        game: game,
+        playerAddedToSide: playerSide
+    });
 });
 
 io.on('connection', function(socket){

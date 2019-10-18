@@ -1,17 +1,15 @@
 <template>
   <div id="app">
-    <template v-if="gameStatus === 'register'">
+    <template v-if="initialGame.status === 'register'">
       <RegisterPlayer v-on:register="onRegisterPlayer" />
     </template>
-    <template v-else-if="gameStatus === 'pending'">
-      <label>Email</label>
-      <input placeholder="Enter your email address">
+    <template v-else-if="initialGame.status === 'pending'">
+      <div class="waiting">Please wait for player joining ....</div>
     </template>
     <template v-else>
-      <PongBoard />
+      <PongBoard :initialGame="initialGame" :mySide="mySide" />
     </template>
     <!-- <img alt="Vue logo" src="./assets/logo.png"> HELLLOOOOO //-->
-
   </div>
 </template>
 
@@ -27,7 +25,28 @@ export default {
     },
     data: function () {
         return {
-            gameStatus: 'register'
+            initialGame: {
+                gameId: '',
+                status: 'register',
+                playerLeft: {
+                    name: 'Super Mario',
+                    positionY: 50,
+                    points  : 0
+                },
+                playerRight: {
+                    name: 'Donkey',
+                    positionY: 100,
+                    points: 0
+                },
+                ball: {
+                    destination: {
+                        newX: 0,
+                        newY: 0,
+                    },
+                    direction: 'left'
+                }
+            },
+            mySide: ''
         }
     },
     methods: {
@@ -36,7 +55,9 @@ export default {
                 player: event.player
             })
             .then((response) => {
-              console.log(response);
+                this.initialGame = response.game;
+                this.mySide = response.playerAddedToSide;
+                console.log(response);
             }, (error) => {
               console.log(error);
             });
