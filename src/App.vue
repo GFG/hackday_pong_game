@@ -55,8 +55,8 @@ export default {
                 player: event.player
             })
             .then((response) => {
-                this.initialGame = response.game;
-                this.mySide = response.playerAddedToSide;
+                this.initialGame = response.data.game;
+                this.mySide = response.data.playerAddedToSide;
                 console.log(response);
             }, (error) => {
               console.log(error);
