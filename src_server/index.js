@@ -107,7 +107,6 @@ io.on('connection', function (socket)
     });
     socket.on('player-moved', function (payload)
     {
-
         if (payload.positionPlayer === 'left') {
             game.playerLeft.positionY = payload.playerY
         } else {
@@ -117,7 +116,8 @@ io.on('connection', function (socket)
     });
     socket.on('move-ball', function (payloadBall)
     {
-        game.ball = payloadBall;
+        console.log(payloadBall);
+        game.ball= payloadBall;
         io.emit('update-board', game);
     });
 
