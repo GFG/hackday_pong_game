@@ -6,14 +6,21 @@
     <template v-else-if="initialGame.status === 'pending'">
       <div class="waiting">Please wait for player joining ....</div>
     </template>
+    <template v-else-if="initialGame.status === 'ready'">
+      <div class="waiting">Loading game ....</div>
+    </template>
     <template v-else>
-      <PongBoard :initialGame="initialGame" :mySide="mySide" />
+      <PongBoard
+              :initialGame="initialGame"
+              :mySide="mySide"
+              :socketConnection="socketConnection" />
     </template>
     <!-- <img alt="Vue logo" src="./assets/logo.png"> HELLLOOOOO //-->
   </div>
 </template>
 
 <script>
+import io from 'socket.io'
 import axios from 'axios'
 import PongBoard from './components/PongBoard.vue'
 import RegisterPlayer from './components/RegisterPlayer.vue'
@@ -46,8 +53,12 @@ export default {
                     direction: 'left'
                 }
             },
-            mySide: ''
+            mySide: '',
+            socketConnection: null
         }
+    },
+    mounted() {
+      this.socketConnection = io();
     },
     methods: {
         onRegisterPlayer: function (event) {

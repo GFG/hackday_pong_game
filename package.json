@@ -21,6 +21,7 @@
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
     "express": "^4.17.1",
+    "socket.io": "^2.3.0",
     "transitionjs": "0.0.7",
     "vue-template-compiler": "^2.6.10"
   },

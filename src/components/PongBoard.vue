@@ -21,7 +21,8 @@ export default {
   name: 'PongBoard',
   props: {
     initialGame: Object,
-    mySide: String
+    mySide: String,
+    socketConnection: Object
   },
   data: function () {
       return {
