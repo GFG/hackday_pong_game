@@ -22,9 +22,9 @@ let game = {
     "ball": {
         "destination": {
             "newX": 0,
-            "newY": 0,
-            "direction": "left"
-        }
+            "newY": 0
+        },
+        "direction": "left"
     }
 };
 
