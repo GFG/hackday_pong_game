@@ -91,10 +91,11 @@ export default {
 
       checkLeftPlayerHit: function (ball) {
           if (ball.x > 15 && ball.x < 25) {
-              if (ball.y >= this.playerLeft.positionY && ball.y - 10 <= this.playerLeft.positionY + 60) {
-                  console.log("HIT =================");
+              if (ball.y >= this.playerLeft.positionY && ball.y + 10 <= this.playerLeft.positionY + 60) {
+                  console.log("HIT LEFT =================");
                   this.moveBall('right');
               } else {
+                  console.log("FAIL LEFT =================");
                   this.gamePoint('right');
               }
           }
@@ -102,10 +103,11 @@ export default {
 
       checkRightPlayerHit: function (ball) {
           if (ball.x > 765 && ball.x < 775) {
-              if (ball.y >= this.playerRight.positionY && ball.y - 10 <= this.playerRight.positionY + 60) {
-                  console.log("HIT =================")
+              if (ball.y >= this.playerRight.positionY && ball.y + 10 <= this.playerRight.positionY + 60) {
+                  console.log("HIT RIGHT =================");
                   this.moveBall('left');
               } else {
+                  console.log("FAIL RIGHT =================");
                   this.gamePoint('left');
               }
           }
@@ -124,11 +126,7 @@ export default {
           if (player.points == 10) {
               console.log(" ******* GAME OVER ***********");
           } else {
-              if (position == 'left') {
-                  this.moveBall('right');
-              } else {
-                  this.moveBall('left');
-              }
+              this.moveBall(position);
           }
       },
 

@@ -15,6 +15,7 @@ export default {
         }
     },
     mounted() {
+        this.watchBallPosition();
         this.$emit('ready');
     },
     beforeDestroy() {
@@ -22,7 +23,6 @@ export default {
     },
     methods: {
         move: function(newX, newY) {
-            //  this.watchBallPosition();
             transition.begin(this.$el, [
                 {
                     property: "left",
@@ -36,13 +36,7 @@ export default {
                 },
             ], {
                 duration: "4000ms",
-                timingFunction: "linear",
-                onTransitionEnd: () => {
-                    clearInterval(this.idInterval);
-                },
-                onBeforeChangeStyle: () => {
-                    this.watchBallPosition();
-                }
+                timingFunction: "linear"
             })
         },
 
