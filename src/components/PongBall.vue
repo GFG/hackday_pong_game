@@ -37,6 +37,7 @@ export default {
             ], {
                 duration: "4000ms",
                 timingFunction: "linear"
+                // @todo check if beginFromCurrentValue: true helps
             })
         },
 
