@@ -48,6 +48,10 @@ export default {
   methods: {
       // ball -----------------------------
       gameStartBallMove: function () {
+          if (this.mySide == 'right') { // make left player the master
+              return;
+          }
+
           const ballDirection = (Math.random() >= 0.5) ? 'left' : 'right';
           //const ballDirection = 'left';
 
@@ -70,6 +74,10 @@ export default {
       },
 
       handleBallPosition: function (ball) {
+          if (this.mySide == 'right') { // make left player the master
+              return;
+          }
+
           if (this.game.ball.direction == 'left') {
               this.checkLeftPlayerHit(ball)
           }
