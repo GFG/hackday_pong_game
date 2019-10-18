@@ -20,9 +20,11 @@ let game = {
         "points": 0
     },
     "ball": {
-        "newX": 0,
-        "newY": 0,
-        "direction": "left"
+        "destination": {
+            "newX": 0,
+            "newY": 0,
+            "direction": "left"
+        }
     }
 };
 
