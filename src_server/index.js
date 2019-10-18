@@ -1,10 +1,18 @@
 let app = require('express')();
 let http = require('http').createServer(app);
 let io = require('socket.io')(http);
-let path = require('path')(http);
+let path = require('path');
+
 app.get('/', function(req, res){
     /*res.sendFile(__dirname + '/index.html');*/
-    res.sendFile(path.realpath('/../dist/index.html'));
+    res.sendFile(path.resolve('/home/ubuntu/hackday_pong_game/dist/index.html'));
+});
+
+app.get('/css*', function(req, res) {
+    res.sendFile(path.resolve('/home/ubuntu/hackday_pong_game/dist/' + req.url))
+});
+app.get('/js*', function(req, res) {
+    res.sendFile(path.resolve('/home/ubuntu/hackday_pong_game/dist/' + req.url))
 });
 
 io.on('connection', function(socket){
