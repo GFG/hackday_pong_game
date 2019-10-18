@@ -1,17 +1,47 @@
 <template>
   <div id="app">
+    <template v-if="gameStatus === 'register'">
+      <RegisterPlayer v-on:startGame="onRegisterPlayer" />
+    </template>
+    <template v-else-if="gameStatus === 'pending'">
+      <label>Email</label>
+      <input placeholder="Enter your email address">
+    </template>
+    <template v-else>
+      <PongBoard />
+    </template>
     <!-- <img alt="Vue logo" src="./assets/logo.png"> HELLLOOOOO //-->
-    <PongBoard />
+
   </div>
 </template>
 
 <script>
+import axios from 'axios'
 import PongBoard from './components/PongBoard.vue'
+import RegisterPlayer from './components/RegisterPlayer.vue'
 export default {
-  name: 'app',
-  components: {
-      PongBoard
-  }
+    name: 'app',
+    components: {
+        PongBoard,
+        RegisterPlayer
+    },
+    data: function () {
+        return {
+            gameStatus: 'register'
+        }
+    },
+    methods: {
+        onRegisterPlayer: function (event) {
+            axios.post('/game', {
+                player: event.player
+            })
+            .then((response) => {
+              console.log(response);
+            }, (error) => {
+              console.log(error);
+            });
+        },
+    }
 }
 </script>
 
