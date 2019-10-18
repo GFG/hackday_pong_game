@@ -76,6 +76,7 @@ export default {
           };
 
           this.game.ball.direction = ballDirection;
+          this.socketConnection.on('move-ball', this.game.ball);
       },
 
       handleBallPosition: function (ball) {

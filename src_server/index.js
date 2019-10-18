@@ -28,20 +28,24 @@ let game = {
     }
 };
 
-app.get('/', function(req, res){
+app.get('/', function (req, res)
+{
     /*res.sendFile(__dirname + '/index.html');*/
     res.sendFile(path.resolve('/home/ubuntu/hackday_pong_game/dist/index.html'));
 });
 
-app.get('/css*', function(req, res) {
+app.get('/css*', function (req, res)
+{
     res.sendFile(path.resolve('/home/ubuntu/hackday_pong_game/dist/' + req.url))
 });
-app.get('/js*', function(req, res) {
+app.get('/js*', function (req, res)
+{
     res.sendFile(path.resolve('/home/ubuntu/hackday_pong_game/dist/' + req.url))
 });
 
 
-app.post('/leave-match', function (req, res) {
+app.post('/leave-match', function (req, res)
+{
     game = {
         "gameId": null,
         "status": "pending",
@@ -58,14 +62,15 @@ app.post('/leave-match', function (req, res) {
         "ball": {
             "destination": {
                 "newX": 0,
-                "newY": 0,
-                "direction": "left"
-            }
+                "newY": 0
+            },
+            "direction": "left"
         }
     };
     res.send(game);
 });
-app.post('/register', function(req, res) {
+app.post('/register', function (req, res)
+{
 
     let playerSide;
 
@@ -87,32 +92,43 @@ app.post('/register', function(req, res) {
     });
 });
 
-io.on('connection', function(socket){
+io.on('connection', function (socket)
+{
     console.log('a user connected');
-    socket.on('chat message', function(msg){
+    socket.on('chat message', function (msg)
+    {
         io.emit('chat message', msg);
     });
-    socket.on('start-game', function(){
+    socket.on('start-game', function ()
+    {
         console.log('Send signal to start the game to all clients - game is ready to start');
         game.status = 'startGame';
         io.emit('load-board', game);
     });
-    socket.on('player-moved', function (payload) {
+    socket.on('player-moved', function (payload)
+    {
 
         if (payload.positionPlayer === 'left') {
             game.playerLeft.positionY = payload.playerY
         } else {
             game.playerRight.positionY = payload.playerY
         }
-       io.emit('update-board', game);
+        io.emit('update-board', game);
+    });
+    socket.on('move-ball', function (payloadBall)
+    {
+        game.ball = payloadBall;
+        io.emit('update-board', game);
     });
 
-    socket.on('disconnect', function(){
+    socket.on('disconnect', function ()
+    {
         console.log('user disconnected');
     });
 
 });
 
-http.listen(3000, function(){
+http.listen(3000, function ()
+{
     console.log('listening on *:3000');
 });
