@@ -9,6 +9,11 @@
       <div class="player-left-name">{{game.playerLeft.name}}</div>
       <div class="game-status">{{game.playerLeft.points}}:{{game.playerRight.points}}</div>
       <div class="player-right-name">{{game.playerRight.name}}</div>
+      <p>w - move player up, s - move player down</p>
+    </div>
+    <div class="game-over" v-if="game.status === 'over'">
+      <h1>Game over</h1>
+      <p>{{winnerName}} has won</p>
     </div>
   </div>
 </template>
@@ -29,11 +34,17 @@ export default {
           game: this.initialGame
       }
   },
+  computed: {
+      winnerName: function () {
+          return (this.game.playerLeft.points == 10) ? this.game.playerLeft.name : this.game.playerRight.name;
+      }
+  },
   components: {
       PongPlayer,
       PongBall
   },
   mounted() {
+    // move my player bar on keypress
     window.addEventListener("keypress", e => {
         if ('w' == String.fromCharCode(e.keyCode)) {
             this.MovePlayer(this.mySide, -25)
@@ -42,6 +53,7 @@ export default {
         }
     });
 
+    // listen to game changes from socket
     this.socketConnection.on('update-board', (game) =>  {
       console.log(game);
       this.game = game;
@@ -58,7 +70,6 @@ export default {
           }
 
           const ballDirection = (Math.random() >= 0.5) ? 'left' : 'right';
-          //const ballDirection = 'left';
 
           setTimeout(() => {
               this.moveBall(ballDirection);
@@ -85,32 +96,20 @@ export default {
           }
 
           if (this.game.ball.direction == 'left') {
-              this.checkLeftPlayerHit(ball)
+              this.checkPlayerHit(ball, 15, 25, this.game.playerLeft, 'left', 'right');
           }
 
-          this.checkRightPlayerHit(ball);
+          this.checkPlayerHit(ball, 765, 775, this.game.playerRight, 'right', 'left');
       },
 
-      checkLeftPlayerHit: function (ball) {
-          if (ball.x > 15 && ball.x < 25) {
-              if (ball.y >= this.game.playerLeft.positionY && ball.y + 10 <= this.game.playerLeft.positionY + 60) {
-                  console.log("HIT LEFT =================");
-                  this.moveBall('right');
+      checkPlayerHit: function (ball, xMin, xMax, player, playerPosition, otherPlayerPosition) {
+          if (ball.x > xMin && ball.x < xMax) {
+              if (ball.y >= player.positionY && ball.y + 10 <= player.positionY + 60) {
+                  console.log("HIT " + playerPosition + " =================");
+                  this.moveBall(otherPlayerPosition);
               } else {
-                  console.log("FAIL LEFT =================");
-                  this.gamePoint('right');
-              }
-          }
-      },
-
-      checkRightPlayerHit: function (ball) {
-          if (ball.x > 765 && ball.x < 775) {
-              if (ball.y >= this.game.playerRight.positionY && ball.y + 10 <= this.game.playerRight.positionY + 60) {
-                  console.log("HIT RIGHT =================");
-                  this.moveBall('left');
-              } else {
-                  console.log("FAIL RIGHT =================");
-                  this.gamePoint('left');
+                  console.log("FAIL " + playerPosition + " =================");
+                  this.gamePoint(otherPlayerPosition);
               }
           }
       },
@@ -127,10 +126,19 @@ export default {
 
       gamePoint: function(position) {
           let player = this.getPlayerByPosition(position);
-          console.log(player)
+          console.log(player);
           player.points = player.points + 1 ;
+
+          this.socketConnection.emit("player-made-point", {
+              "positionPlayer": position,
+              "points": player.points
+          });
+
           if (player.points == 10) {
               console.log(" ******* GAME OVER ***********");
+
+              this.socketConnection.emit("game-over", {});
+
           } else {
               this.moveBall(position);
           }

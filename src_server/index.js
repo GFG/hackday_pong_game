@@ -99,6 +99,7 @@ io.on('connection', function (socket)
     {
         io.emit('chat message', msg);
     });
+
     socket.on('start-game', function ()
     {
         console.log('Send signal to start the game to all clients - game is ready to start');
@@ -118,6 +119,20 @@ io.on('connection', function (socket)
     {
         console.log(payloadBall);
         game.ball= payloadBall;
+        io.emit('update-board', game);
+    });
+    socket.on('player-made-point', function (payload)
+    {
+        if (payload.positionPlayer === 'left') {
+            game.playerLeft.points = payload.points
+        } else {
+            game.playerRight.points = payload.points
+        }
+        io.emit('update-board', game);
+    });
+    socket.on('game-over', function ()
+    {
+        game.status = 'over';
         io.emit('update-board', game);
     });
 
