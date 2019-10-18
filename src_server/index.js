@@ -75,7 +75,7 @@ app.post('/register', function(req, res) {
         console.log('Player left successful added');
     } else if (game.playerRight.name === null) {
         game.playerRight.name = req.body.player;
-        game.status = "startGame";
+        game.status = "ready";
         playerSide = 'right';
         console.log('Player right successful added');
 
@@ -95,6 +95,11 @@ io.on('connection', function(socket){
     socket.on('chat message', function(msg){
         console.log('message: ' + msg);
         io.emit('chat message', msg);
+    });
+    socket.on('start-game', function(){
+        console.log('game is ready to start');
+        game.status = 'startGame';
+        io.emit('load-board', game);
     });
     socket.on('disconnect', function(){
         console.log('user disconnected');

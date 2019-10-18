@@ -59,6 +59,9 @@ export default {
     },
     mounted() {
       this.socketConnection = io();
+      this.socketConnection.on('load-board', (game) => {
+        this.initialGame = game;
+      });
     },
     methods: {
         onRegisterPlayer: function (event) {
@@ -68,6 +71,10 @@ export default {
             .then((response) => {
                 this.initialGame = response.data.game;
                 this.mySide = response.data.playerAddedToSide;
+
+                if (response.data.game.status === 'ready') {
+                    this.socketConnection.emit('start-game', '');
+                }
                 console.log(response);
             }, (error) => {
               console.log(error);
