@@ -40,6 +40,31 @@ app.get('/js*', function(req, res) {
     res.sendFile(path.resolve('/home/ubuntu/hackday_pong_game/dist/' + req.url))
 });
 
+
+app.post('/leave-match', function (req, res) {
+    game = {
+        "gameId": null,
+        "status": "pending",
+        "playerLeft": {
+            "name": null,
+            "positionY": 50,
+            "points": 0
+        },
+        "playerRight": {
+            "name": null,
+            "positionY": 50,
+            "points": 0
+        },
+        "ball": {
+            "destination": {
+                "newX": 0,
+                "newY": 0,
+                "direction": "left"
+            }
+        }
+    };
+    res.send(game);
+});
 app.post('/register', function(req, res) {
 
     if (game.playerLeft.name === null) {
