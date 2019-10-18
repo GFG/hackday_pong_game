@@ -119,6 +119,7 @@ export default {
 
       gamePoint: function(position) {
           let player = this.getPlayerByPosition(position);
+          console.log(player)
           player.points = player.points + 1 ;
           if (player.points == 10) {
               console.log(" ******* GAME OVER ***********");
