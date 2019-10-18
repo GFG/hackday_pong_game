@@ -104,7 +104,7 @@ io.on('connection', function(socket){
         } else {
             game.playerRight.positionY = payload.playerY
         }
-       socket.emit('update-board', game);
+       io.emit('update-board', game);
     });
 
     socket.on('disconnect', function(){

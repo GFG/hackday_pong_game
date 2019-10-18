@@ -43,6 +43,7 @@ export default {
     });
 
     this.socketConnection.on('update-board', (game) =>  {
+      console.log(game);
       this.game = game;
     })
   },

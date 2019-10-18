@@ -53,7 +53,7 @@ export default {
                     }
                 );
 
-              console.log("Left: " + this.$el.offsetLeft + ", Top: " + this.$el.offsetTop);
+              /*console.log("Left: " + this.$el.offsetLeft + ", Top: " + this.$el.offsetTop);*/
             }, 65)
         }
     }
