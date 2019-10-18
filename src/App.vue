@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <template v-if="gameStatus === 'register'">
-      <RegisterPlayer v-on:startGame="onRegisterPlayer" />
+      <RegisterPlayer v-on:register="onRegisterPlayer" />
     </template>
     <template v-else-if="gameStatus === 'pending'">
       <label>Email</label>
@@ -32,7 +32,7 @@ export default {
     },
     methods: {
         onRegisterPlayer: function (event) {
-            axios.post('/game', {
+            axios.post('/register', {
                 player: event.player
             })
             .then((response) => {

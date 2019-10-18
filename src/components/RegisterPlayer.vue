@@ -18,7 +18,7 @@ export default {
     },
     methods: {
         handleSubmit() {
-            this.$emit('startGame', { player: this.playerName})
+            this.$emit('register', { player: this.playerName})
         }
     }
 }
