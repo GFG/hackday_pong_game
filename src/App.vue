@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import io from 'socket.io'
+import io from 'socket.io-client'
 import axios from 'axios'
 import PongBoard from './components/PongBoard.vue'
 import RegisterPlayer from './components/RegisterPlayer.vue'
@@ -73,7 +73,8 @@ export default {
                 this.mySide = response.data.playerAddedToSide;
 
                 if (response.data.game.status === 'ready') {
-                    this.socketConnection.emit('start-game', '');
+                  debugger;
+                    this.socketConnection.emit('start-game', 'go');
                 }
                 console.log(response);
             }, (error) => {

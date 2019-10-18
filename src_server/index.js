@@ -72,18 +72,15 @@ app.post('/register', function(req, res) {
     if (game.playerLeft.name === null) {
         game.playerLeft.name = req.body.player;
         playerSide = 'left';
-        console.log('Player left successful added');
     } else if (game.playerRight.name === null) {
         game.playerRight.name = req.body.player;
         game.status = "ready";
         playerSide = 'right';
-        console.log('Player right successful added');
 
     } else {
         res.status(400).send({"message": "Can't join the game!"});
         return
     }
-    console.log('Ready to start game!');
     res.send({
         game: game,
         playerAddedToSide: playerSide
@@ -93,14 +90,23 @@ app.post('/register', function(req, res) {
 io.on('connection', function(socket){
     console.log('a user connected');
     socket.on('chat message', function(msg){
-        console.log('message: ' + msg);
         io.emit('chat message', msg);
     });
     socket.on('start-game', function(){
-        console.log('game is ready to start');
+        console.log('Send signal to start the game to all clients - game is ready to start');
         game.status = 'startGame';
         io.emit('load-board', game);
     });
+    socket.on('player-moved', function (payload) {
+
+        if (payload.positionPlayer === 'left') {
+            game.playerLeft.positionY = payload.playerY
+        } else {
+            game.playerRight.positionY = payload.playerY
+        }
+       socket.emit('update-board', game);
+    });
+
     socket.on('disconnect', function(){
         console.log('user disconnected');
     });

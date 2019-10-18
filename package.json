@@ -23,6 +23,7 @@
     "express": "^4.17.1",
     "socket.io": "^2.3.0",
     "transitionjs": "0.0.7",
+    "uws": "^9.14.0",
     "vue-template-compiler": "^2.6.10"
   },
   "eslintConfig": {
@@ -35,7 +36,8 @@
       "eslint:recommended"
     ],
     "rules": {
-      "no-console": "off"
+      "no-console": "off",
+      "no-debugger": "off"
     },
     "parserOptions": {
       "parser": "babel-eslint"

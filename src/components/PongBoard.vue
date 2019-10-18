@@ -41,6 +41,10 @@ export default {
             this.MovePlayer(this.mySide, 25)
         }
     });
+
+    this.socketConnection.on('update-board', (game) =>  {
+      this.game = game;
+    })
   },
 
   //@todo beforeDestroy removeEventListener
@@ -113,6 +117,10 @@ export default {
       MovePlayer: function(position, step) {
         let player = this.getPlayerByPosition(position);
         player.positionY = this.calculateNewPlayerPosition(step, player.positionY);
+        this.socketConnection.emit("player-moved", {
+          "positionPlayer": position,
+          "playerY": player.positionY
+        });
       },
 
       gamePoint: function(position) {
