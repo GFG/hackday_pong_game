@@ -70,13 +70,13 @@ export default {
       },
 
       moveBall: function (ballDirection) {
-          this.game.ball.destination = {
-              newX: (ballDirection == 'right') ? 800 : 0,
-              newY: this.randomY()
-          };
-
-          this.game.ball.direction = ballDirection;
-          this.socketConnection.on('move-ball', this.game.ball);
+          this.socketConnection.on('move-ball', {
+              destination: {
+                  newX: (ballDirection == 'right') ? 800 : 0,
+                  newY: this.randomY()
+              },
+              direction: ballDirection
+          });
       },
 
       handleBallPosition: function (ball) {
